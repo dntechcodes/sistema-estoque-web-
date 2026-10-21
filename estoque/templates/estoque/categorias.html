@@ -1,0 +1,47 @@
+{% extends 'estoque/base.html' %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+<div class="grid-layout">
+    
+    <!-- Lado Esquerdo: Formulário de Registo -->
+    <div class="card">
+        <h2 class="card-header">Registar Categoria</h2>
+        <form method="POST" action="{% url 'categorias' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Nome da Categoria</label>
+                <input type="text" name="nome" required>
+            </div>
+            <button type="submit" class="btn">Guardar Categoria</button>
+        </form>
+    </div>
+
+    <!-- Lado Direito: Lista de Categorias -->
+    <div class="card">
+        <h2 class="card-header">Categorias Registadas</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome da Categoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td>#{{ categoria.id }}</td>
+                    <td>{{ categoria.nome }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="empty-table">Nenhuma categoria registada ainda.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

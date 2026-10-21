@@ -1,0 +1,44 @@
+{% extends 'estoque/base.html' %}
+
+{% block title %}Nova Venda{% endblock %}
+
+{% block content %}
+<div class="grid-layout">
+    
+    <!-- Lado Esquerdo: Formulário de Saída -->
+    <div class="card">
+        <h2 class="card-header">Registar Saída (Venda)</h2>
+        <form method="POST" action="{% url 'nova_venda' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Produto</label>
+                <select name="produto_id" required>
+                    <option value="" disabled selected>Selecione o produto vendido...</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.estoque_atual }} | R$ {{ produto.preco }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantidade Vendida</label>
+                <input type="number" name="quantidade" min="1" required>
+            </div>
+
+            <button type="submit" class="btn">Confirmar Venda e Abater Estoque</button>
+        </form>
+    </div>
+
+    <!-- Lado Direito: Instruções e Regras de Negócio -->
+    <div class="card">
+        <h2 class="card-header">Instruções do Sistema</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+            <strong>Integridade de Dados (Rollback Automático):</strong><br><br>
+            Ao clicar em confirmar, o sistema executa uma validação atómica no banco de dados SQLite.<br><br> 
+            Caso a quantidade solicitada seja superior ao estoque atual, o sistema bloqueará a operação e exibirá um alerta vermelho, garantindo que o estoque nunca fique negativo.
+        </p>
+    </div>
+
+</div>
+{% endblock %}

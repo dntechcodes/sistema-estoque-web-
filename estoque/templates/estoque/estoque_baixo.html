@@ -1,0 +1,46 @@
+{% extends 'estoque/base.html' %}
+
+{% block title %}Estoque Baixo{% endblock %}
+
+{% block content %}
+<div class="card" style="border-color: #b91c1c;">
+    <h2 class="card-header" style="color: #fca5a5;">⚠️ Alerta de Estoque Baixo</h2>
+    
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">
+        Abaixo estão listados os produtos cujo estoque atual atingiu ou ultrapassou o limite mínimo definido no registo.
+    </p>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Em Estoque</th>
+                    <th>Mínimo Permitido</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produto in produtos %}
+                <tr>
+                    <td>#{{ produto.id }}</td>
+                    <td>{{ produto.nome }}</td>
+                    <td>{{ produto.categoria.nome }}</td>
+                    <td class="text-red">{{ produto.estoque_atual }}</td>
+                    <td>{{ produto.estoque_minimo }}</td>
+                    <td class="text-red">Necessário Repor</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-table" style="color: #4ade80;">
+                        🎉 Excelente! Todos os produtos encontram-se com níveis de estoque saudáveis.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque Web - {% block title %}Painel{% endblock %}</title>
+    
+    <style>
+        :root {
+            --brand: #10b981;
+            --brand-hover: #059669;
+            --darkbg: #18181b;
+            --darkcard: #27272a;
+            --text-main: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --border-color: #3f3f46;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--darkbg);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--darkcard);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            height: 64px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .logo { font-weight: bold; font-size: 1.25rem; color: white; letter-spacing: 1px; }
+        .logo span { color: var(--brand); }
+
+        .menu a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin-right: 1.5rem;
+            padding-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .menu a:hover { color: var(--brand); border-bottom: 2px solid var(--brand); }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+
+        .alert { padding: 1rem; margin-bottom: 1.5rem; border-radius: 6px; font-size: 0.9rem; }
+        .alert-success { background-color: #064e3b; border: 1px solid #047857; color: #d1fae5; }
+        .alert-error { background-color: #7f1d1d; border: 1px solid #b91c1c; color: #fee2e2; }
+
+        .grid-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        .card { background-color: var(--darkcard); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); }
+        .card-header { margin-top: 0; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: white; font-size: 1.2rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
+
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+        input, select {
+            width: 100%; padding: 0.6rem; background-color: var(--darkbg);
+            border: 1px solid var(--border-color); color: white; border-radius: 4px; box-sizing: border-box;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--brand); }
+
+        .btn {
+            width: 100%; background-color: var(--brand); color: white; padding: 0.7rem;
+            border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 1rem;
+        }
+        .btn:hover { background-color: var(--brand-hover); }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        th { background-color: var(--darkbg); padding: 0.8rem; border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; }
+        td { padding: 0.8rem; border-bottom: 1px solid var(--border-color); }
+        tr:hover { background-color: var(--darkbg); }
+        
+        .text-red { color: #f87171; font-weight: bold; }
+        .text-green { color: #4ade80; }
+        .empty-table { text-align: center; color: var(--text-muted); font-style: italic; padding: 2rem; }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <span>⬢</span> ESTOQUE <span>WEB</span>
+            </div>
+            <div class="menu">
+                <a href="{% url 'produtos' %}">Produtos</a>
+                <a href="{% url 'categorias' %}">Categorias</a>
+                <a href="{% url 'nova_venda' %}">Nova venda</a>
+                <a href="{% url 'estoque_baixo' %}">Estoque baixo</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
