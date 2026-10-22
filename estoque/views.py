@@ -26,8 +26,12 @@ def categorias(request):
     if request.method == 'POST':
         nome = request.POST.get('nome')
         if nome:
-            Categoria.objects.create(nome=nome)
-            messages.success(request, 'Categoria registada com sucesso!')
+            # NOVA VERIFICAÇÃO: Checa se a categoria já existe antes de guardar
+            if Categoria.objects.filter(nome=nome).exists():
+                messages.error(request, f'Erro: A categoria "{nome}" já existe!')
+            else:
+                Categoria.objects.create(nome=nome)
+                messages.success(request, 'Categoria registada com sucesso!')
         return redirect('categorias')
     
     lista_categorias = Categoria.objects.all()
