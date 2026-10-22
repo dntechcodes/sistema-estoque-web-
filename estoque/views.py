@@ -68,4 +68,30 @@ def estoque_baixo(request):
     produtos_alerta = [p for p in todos_produtos if p.verificar_estoque_baixo()]
     return render(request, 'estoque/estoque_baixo.html', {'produtos': produtos_alerta})
 
-# Create your views here.
+
+
+def excluir_produto(request, id):
+    """Exclui um produto do sistema e retorna para a listagem."""
+    produto = get_object_or_404(Produto, id=id)
+    produto.delete()
+    messages.success(request, 'Produto excluído com sucesso!')
+    return redirect('produtos')
+
+def editar_produto(request, id):
+    """Carrega os dados do produto para edição e guarda as alterações."""
+    produto = get_object_or_404(Produto, id=id)
+    lista_categorias = Categoria.objects.all()
+    
+    if request.method == 'POST':
+        # Atualiza os dados com base no que foi digitado no formulário
+        produto.nome = request.POST.get('nome')
+        produto.categoria_id = request.POST.get('categoria_id')
+        produto.preco = Decimal(request.POST.get('preco').replace(',', '.'))
+        produto.estoque_atual = int(request.POST.get('estoque_atual'))
+        produto.estoque_minimo = int(request.POST.get('estoque_minimo'))
+        produto.save()
+        
+        messages.success(request, 'Produto atualizado com sucesso!')
+        return redirect('produtos')
+        
+    return render(request, 'estoque/editar_produto.html', {'produto': produto, 'categorias': lista_categorias})
